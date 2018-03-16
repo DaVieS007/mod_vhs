@@ -1,0 +1,7 @@
+
+  Allow mod_ldap and mod_dbd to be compiled on the module
+
+  Fix PHP zend_alter_ini to use symbolic stuff instead of hardcoded
+  values.
+   See : zend_alter_ini_entry(..., PHP_INI_SYSTEM, PHP_INI_STAGE_RUNTIME); 
+	http://markmail.org/message/bv7a4p5vflncxe4l#query:zend_alter_ini_entry+page:1+mid:bv7a4p5vflncxe4l+state:results

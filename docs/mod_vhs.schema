@@ -1,0 +1,99 @@
+# $Id: mod_vhs.schema,v 1.1 2009-05-22 20:27:29 kiwi Exp $
+# mod_vhs Schema
+#
+# Please place number 17533 with your SNMP id
+# 
+# OIDs are owned by Association Kazar
+# 1.3.6.1.4.1.17533
+
+
+attributetype ( 1.3.6.1.4.1.17533.1.1.2 NAME 'apacheServerName'
+	SUP name
+	DESC 'mod_vhs: Apache ServerName'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
+	SINGLE-VALUE )
+	
+attributetype ( 1.3.6.1.4.1.17533.1.1.3 NAME 'apacheServerAlias'
+	SUP name
+	DESC 'mod_vhs: Apache ServerAlias'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} )
+	
+attributetype ( 1.3.6.1.4.1.17533.1.1.4 NAME 'apacheDocumentRoot'
+	SUP name
+	DESC 'mod_vhs: Apache DocumentRoot'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
+	SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.17533.1.1.5 NAME 'apacheServerAdmin'
+	SUP name
+	DESC 'mod_vhs: Apache ServerAdmin'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
+	SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.17533.1.1.6 NAME 'apacheScriptAlias'
+        SUP name
+        DESC 'mod_vhs: Apache ScriptAlias'
+        EQUALITY caseIgnoreMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
+        SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.17533.1.1.7 NAME 'apacheSuexecUid'
+	SUP name
+	DESC 'mod_vhs: Apache SuexecUid'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
+	SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.17533.1.1.8 NAME 'apacheSuexecGid'
+	SUP name
+	DESC 'mod_vhs: Apache SuexecGid'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
+	SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.17533.1.1.9 NAME 'apacheRedirectTo'
+	SUP name
+	DESC 'mod_vhs: Apache redirect vhost to'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
+	SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.17533.1.1.10 NAME 'apacheOpenBasedir'
+	SUP name
+	DESC 'mod_vhs: The php openbase dir to restrict this vhost to'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
+	SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.17533.1.1.11 NAME 'apacheExpire'
+	DESC 'mod_vhs: On which day does this vhost expire'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27 SINGLE-VALUE )
+    
+attributetype ( 1.3.6.1.4.1.17533.1.1.12 NAME 'apacheAccountName'
+	SUP name
+	DESC 'mod_vhs: For accounting purposes, the name of the account this vhost belongs to'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256}
+	SINGLE-VALUE )
+
+objectclass ( 1.3.6.1.4.1.17533.1.2.1 NAME 'apacheConfig'
+	SUP 'top'
+	MUST ( apacheServerName $ apacheDocumentRoot )
+        MAY ( apacheServerAlias $ apacheServerAdmin $ apacheScriptAlias $
+              apacheSuexecUid $ apacheSuexecGid $ apacheOpenBasedir $
+              apacheRedirectTo $ apacheExpire ) )

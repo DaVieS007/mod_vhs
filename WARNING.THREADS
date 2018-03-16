@@ -1,0 +1,19 @@
+Warning about threads
+---------------------
+
+This software has been tested and developped ONLY on prefork apache 2.
+
+Since mod_vhs 1.1, the libhome usage has being dropped to use mod_ldap
+ou mod_dbd, so the module should be thread safe for worker or some other
+MPM that use threads.
+
+I try to use low level apr function to avoid any brain dammage about
+non thread safe calls but it is possible to have some bugs.
+
+Also please notice that PHP is more or less thread safe depending of 
+modules you have compiled / installed. If you have some dead locks
+or segfault with this module, please try without PHP before...
+
+Thanks for you attention.
+
+Xavier

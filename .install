@@ -1,0 +1,9 @@
+rm /usr/lib/apache2/modules/mod_vhs.so
+a2dismod xxx_vhs
+make clean
+make install
+
+cp xxx_vhs.load /etc/apache2/mods-available/xxx_vhs.load
+cp ./.libs/mod_vhs.so /usr/lib/apache2/modules/mod_vhs.so
+a2enmod xxx_vhs
+make clean

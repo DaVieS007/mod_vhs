@@ -1,0 +1,3 @@
+rm /usr/lib/apache2/modules/mod_vhs.so
+mv /usr/lib/apache2/modules/mod_vhs.so-old /usr/lib/apache2/modules/mod_vhs.so
+service apache2 restart

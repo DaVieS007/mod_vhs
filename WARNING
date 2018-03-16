@@ -1,0 +1,21 @@
+WARNING About NameVirtualHost oddyty
+
+It seems that Apache 2 has some odd comportement with mod_vhs.
+
+If you have :
+
+NameVirtualHost x.x.x.x
+<VirtualHost x.x.x.x>
+
+And your have some problems with redirect that give you some 
+random pages when a host is not found on the database.
+
+Then you should change a bit your configuration to the
+following :
+
+NameVirtualHost x.x.x.x:80
+<VirtualHost x.x.x.x:80>
+
+And the problem should be fixed.
+
+This was reported by Raphaël JEUDY on IRC.

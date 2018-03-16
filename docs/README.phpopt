@@ -1,0 +1,127 @@
+This README file will explain the limits and how mod_vhs will configure
+PHP "on the fly".
+
+Introduction
+------------
+
+mod_vhs when compiled with -DHAVE_MOD_PHP_SUPPORT, uses zend_alter_ini_entry()
+to change on the fly parameters like you can do with php.ini entry.
+
+
+mod_vhs apache configuration directives
+---------------------------------------
+
+There is several directives (see README file from more) :
+
+	vhs_PHPopen_basedir
+	with :	vhs_open_basedir_path
+		vhs_append_open_basedir
+
+	vhs_PHPdisplay_errors
+
+	and
+	
+	vhs_PHPopt_fromdb
+
+How are evaluated php configuration directives ?
+------------------------------------------------ 
+
+They are evaluated in this order (if they are enabled) :
+
+1- vhs_PHPopen_basedir (and also vhs_open_basedir_path / vhs_append_open_basedir)
+2- vhs_PHPdisplay_errors
+3- vhs_PHPopt_fromdb
+
+You have to know this order of evaluation if you don't have brain damage when 
+you use vhs_PHPopt_fromdb and security problems that you can have because
+of this order of evaluation.
+
+
+Why there can be a security problem ?
+-------------------------------------
+
+vhs_PHPopt_fromdb is evaluated at the end of PHP autoconfiguration.
+
+So if you set an open_basedir and change it from PHPopt_fromdb, then 
+the values used will be from vhs_PHPopt_fromdb.
+
+vhs_PHPopt_fromdb will ALLWAYS HAVE THE LAST WORD in terms of PHP configuration.
+
+This is NOT a bug, but a feature. So you _need_ to be 100% sure the 
+php autoconfiguration from DB will be set to people you trust in terms
+of security.
+
+vhs_PHPopt_fromdb format
+------------------------
+
+mod_vhs will take his parameters from libhome using 'passwd' field.
+
+The format is :
+
+<parameter>=<value>;<parameter>=<value>;
+
+With <parameter> = php.ini parameter (like safe_mode for example)
+     <value>     = php.ini value of this parameter (On for example)
+
+WARNING 1 : you MUST NOT add space or forgot a ";" at the end of ligne
+            CR / LF are passed as is to PHP. So double check the entries
+            in database.
+WARNING 2 : If you don't have anything in you "passwd" entry libhome
+            will not return anything from DB because this can be
+            a null password. So add an default string when php options are
+            not used (like for example "*").
+WARNING 3 : If parameter is boolean (eg On / Off) you have to write in DB
+            using 1 / 0 instead eg :
+		On  = 1
+		Off = 0
+
+vhs_PHPopt_fromdb full example
+------------------------------
+
+This example uses MySQL but you can adapt it to your system :
+
+MySQL Database :
+ 
+CREATE TABLE `vhost` (
+  `ServerName` varchar(100) NOT NULL default 'name.foo.tld',
+  `ServerAdmin` varchar(100) NOT NULL default 'root@foo.tld',
+  `DocumentRoot` varchar(100) NOT NULL default '/tmp/null',
+  `CustomLog` varchar(100) NOT NULL default '/var/log/undefined_apache_host.log',
+  `SuexecUserGroup` varchar(100) NOT NULL default 'nobody nogroup',
+  `SetEnv` varchar(100) NOT NULL default '/tmp',
+  `domain_id` mediumint(9) NOT NULL default '0',
+  `owner` varchar(50) NOT NULL default 'me',
+  `stats` enum('off','on') NOT NULL default 'on',
+  `statsdone` enum('no','yes') NOT NULL default 'no',
+  `isalias` enum('0','1') NOT NULL default '0',
+  `PointTo` varchar(255) NOT NULL default 'null.foo.tld',
+  UNIQUE KEY `ServerName` (`ServerName`)
+) TYPE=MyISAM;
+
+INSERT INTO `vhost` VALUES 
+	('mrjack.oav.net', 'me@foo.tld', '/usr/local/www/mrjack',
+	 '/usr/local/www/mrjack', '/tmp/access.log', 'mrjack ftp',
+	 'memory_limit=32M;upload_max_filesize=8M;expose_php=0;', 1, 'mrjack', 'on',
+	 'yes', '1', 'mrjack.oav.net');
+
+We have a virtual host 'mrjack.oav.net' with php values :
+memory_limit=32M
+upload_max_files=8M
+
+IMPORTANT NOTE
+--------------
+
+Since mod_vhs use Zend functions to change the php ini values, you NEED
+to load mod_php *before* mod_vhs otherwise errors like :
+
+Syntax error on line 269 of /etc/apache/httpd.conf:
+Cannot load /usr/libexec/apache/mod_vhs.so into server: /usr/libexec/apache/mod_vhs.so: undefined symbol: zend_alter_ini_entry  
+
+
+Conclusion
+----------
+
+vhs_PHPopt_fromdb can only configure php.ini values like foo=value, but it 
+cannot configure specific section of php.ini (eg [mysql] for example). So
+you'll have to keep that in mind when designing your system.
+

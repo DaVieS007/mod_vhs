@@ -1,0 +1,73 @@
+LDAP Sample configuration
+-------------------------
+
+There is several ways to use LDAP. On my system I use a 
+custom way.
+
+Here is the object :
+
+ldapsearch -h ldap1 -b ou=whosting,dc=kazar,dc=net wwwDomain=oav.net
+
+# 'oav.net', whosting, kazar.net
+dn: wwwDomain='oav.net',ou=whosting,dc=kazar,dc=net
+objectClass: top
+objectClass: kazarPerson
+objectClass: apacheConfig
+uid: oav
+description: oav.net Website
+uidNumber: 200
+gidNumber: 200
+FTPuid: 200
+FTPgid: 200
+FTPStatus: enabled
+userPassword: <censored>
+homeDirectory: /sites/oav.net/
+associatedDomain: oav.net
+wwwDomain: oav.net
+
+
+The object "kazarPerson" is a posixAccount modified for my own usage.
+
+The minimum attributes needed to get a working LDAP are :
+
+homeDirectory or apacheDocumentRoot
+
+
+Notice that if you have homeDirectory AND apacheDocumentRoot, the code is done
+in a way the homeDirectory should overwrite the apacheDocumentRoot directory.
+
+Note also that the default filter is :
+
+(&(URIFilter)(|(apacheServerName=%s)(apacheServerAlias=%s)))
+
+With URIFiler, per default : objectClass=apacheConfig
+
+For my example, I don't want to use the default filter so, I use in httpd.conf :
+
+vhs_Lamer                       On
+vhs_Default_Host                http://kazar.net
+vhs_PHPopen_basedir             Off
+vhs_open_basedir_path           /hosting/sessions
+vhs_append_open_basedir         On
+vhs_PHPopen_basedir             On
+vhs_PHPdisplay_errors           On      
+vhs_PHPopt_fromdb               Off
+vhs_LDAPUrl                     "ldap://ldap1/ou=whosting,dc=kazar,dc=net???wwwDomain"
+vhs_LDAPSetFilter               On
+
+vhs_LDAPSetFilter will be used to replace (&(URIFilter)(|(apacheServerName=%s)(apacheServerAlias=%s)))
+by URIFilter=%s.
+
+LDAP attributes :
+
+apacheServerName	ServerName
+apacheDocumentRoot	DocumentRoot
+apacheScriptAlias	ScriptAlias (Cgi...)
+apacheSuexecUid		UID for suexec
+apacheSuexecGid		GID for suexec
+apacheServerAdmin	Server Admin email
+apachePhpopts		PHP Options (see php opt file)
+associatedDomain	ServerName
+homeDirectory		Same as apacheDocumentRoot
+
+

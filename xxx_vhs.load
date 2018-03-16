@@ -1,0 +1,2 @@
+#Depends: mpm_itk php5
+LoadModule vhs_module /usr/lib/apache2/modules/mod_vhs.so

@@ -1,0 +1,205 @@
+Since mod_vhs 1.1.0
+-------------------
+o Update and add documentation
+  (Rene Kanzler)
+o Store results of DBD/LDAP requests in mod_vhs connection configuration
+  to prevent new DBD/LDAP queries for currently-open connections.
+  (Rene Kanzler)
+o Splited code into smaller files and moved to include folder. 
+  Moved documentation to the doc folder.
+  (Rene Kanzler)
+o Replace the the hard coded mod_DBD SQL query with the DBDPrepareSQL label
+  (Rene Kanzler)
+o Added memcached support
+  (Rene Kanzler)
+o Add documentation about LDAP setup.
+  (Xavier Beaudouin)
+o Fix LDAP search.
+  (Xavier Beaudouin)
+o For LDAP, allow DocumentRoot give from LDAP Posix attribute 
+  homeDirectory. 
+  (Xavier Beaudouin)
+o For LDAP, add the option to specify a different filter than:
+  (&(FilterinUrl)(|(apacheServerName=%s)(apacheServerAlias=%s))).
+  (Xavier Beaudouin)
+o Since PHP 5.3 doesn't use safe_mode, we don't need it. If you 
+  still need it because you use an old PHP, please set -DOLD_PHP.
+  Notice this code will NOT be maintained anymore
+  (Xavier Beaudouin)
+o Fix bug in lamers mode (Guillaume de Lafond, Dinde, ....)
+o mod_dbd support merged into mod_vhs (Thanks to Guillaume de Lafond to
+  port MySolo module into mod_vhs).
+  Current SQL query is now :
+  SELECT ServerName, ServerAdmin, DocumentRoot, suexec_uid, suexec_gid, 
+         php_env, associateddomain, isalias 
+  FROM The_Table 
+  WHERE ServerName = %s AND active = 'yes'"
+  "The_Table" is given with apache configuration :
+  vhs_VhostDBDTable
+o Splited code into 3 files, smaller files, better to work with.
+  (Guillaume de Lafond)
+o Added #defines to avoid LDAP stuff to be compiled when apache 
+  doesn't have LDAP support (Guillaume de Lafond)
+o Added mpm-itk support (Thanks to Guillaume de Lafond to port patch)
+o Added mod_ldap support
+o Dropped libhome support
+o Added support for suphp for non-systems users (Stephane Locatelli)
+  This allow suphp support when it is compiled with "force" mode and
+  don't break compatibility with "owner" mode.
+o Added some procompilators options to avoir incompatibility between MOD_SUPHP
+  and MOD_VHS 
+
+Since mod_vhs 1.0.32
+--------------------
+o Fixed some compilation errors with Apache 2.2 (and automagicaly set debian
+  compatibility)
+o Added initial support for mod_suphp from Thomas Rasch
+ 
+Since mod_vhs 1.0.30
+--------------------
+o Fixed some errors if #ifdef when using THREADS
+
+Since mod_vhs 1.0.28
+--------------------
+o Added Makefile instead of using scripts
+o Now mod_vhs should compile correctly under Debian/SARGE
+
+Since mod_vhs 1.0.26
+--------------------
+o Added note about regexp problems with libhome
+o Fixed a segfault when php entries are not corrects.
+
+Since mod_vhs 1.0.24
+--------------------
+o Fix wrong paths and informations sent to apache / environment variables
+  when vhs_Path_Prefix is used.
+o PHP can be configured now using "passwd" libhome field.
+o Fix some missing path values when used vhs_Path_Prefix
+o Compile only what is needed. eg don't include php code or config
+  variables when PHP support is not compiled into.
+
+Since mod_vhs 1.0.22
+--------------------
+o Fixed openbasedir append function that didn't worked as it should.
+o Fixed debug for openbasedir stuff.
+o Added warning about Apache2 NameVirtualHost oddyty ...
+
+Since mod_vhs 1.0.20
+--------------------
+o Removed unused variables, and make some code cleanup
+o SuEXEC support has been removed because of conflict of structures
+  between libhome and pwd.h (included by the needs of SuExec).
+o vhs_Default_Host, always use redirect now. The vhs_Default_Host_Redirect
+  configuration option is now removed
+o Try to fix struct passwd conficts. To be tested.
+o Added vhs_LogNotFound flag to enable / disable (disabled per default) logs
+  into apache error log when a host or a path is not found. Patch by 
+  Raphaël Jeudy.
+
+Since mod_vhs 1.0.18
+--------------------
+o Removed VH_HOST variable since it is more or less unusuable and somewhat
+  dangerous. You can enable it again by compiling mod_vhs with -DWANT_VH_HOST.
+o Fixed compilation of mod_vhs when using Apache 2.0 branch (problems
+  with ap_regex_t that exists only on Apache 2.1)
+o Added open_basedir functions to append homedir to a default open_basedir
+  path.
+o Added experimental SUEXEC support. Not tested and not documented !
+o According to Frédéric VANNIERE, mod_rewrite don't work when it
+  is specified in module list... Another neat exception of Apache...
+  Now mod_vhs should work with mod_rewrite...
+o Use Apache internal regexp than "system" ones. This fix portability
+  of this code on Debian
+
+
+Since mod_vhs 1.0.16
+--------------------
+
+o Fixed a crash reported by Renato when parent lamer mode is on and the
+  hostname was not found.
+o New flag to enable / disble VHS (EnableVHS) default to Off to allow
+  some VirtualServer to no have mod_vhs enabled.
+
+Since mod_vhs 1.0.14
+--------------------
+
+o Lamer friendly mode is now fixed.
+o Fixed a non thread safe call when lamer friendly mode is engaged.
+o Added mod_alias "compatible" configuration values, eg : vhs_Alias, 
+  vhs_ScriptAlias, vhs_Redirect, vhs_AliasMatch, vhs_ScriptAliasMatch,
+  vhs_RedirectMatch, vhs_RedirectTemp and vhs_RedirectPermanent configuration
+  directives. See mod_alias manual for more informations.
+
+
+Since mod_vhs 1.0.12
+--------------------
+
+o Added option vhs_PHPdisplay_errors used on PHP support to show 
+  php errors when needed on <VirtualHost></> basis.
+o Added options on load that mod_vhs wait for input from mod_alias and
+  mod_userdir before mod_vhs make things works.
+o Added options on load that mod_vhs is making his work before mod_rewrite
+  and mod_php is making their works.
+o Added option vhs_Default_Host_Redirect (on/off) to force HTTP redirect
+  if default host is triggered.
+o The module should be now threads safe. Note that we don't garantee
+  that your Apache will still be thread safe if you use non thread
+  safe module (like mod_php for example).
+o Add support for PHP 4.3.x. The following entries are modified according
+  to <VirtualHost></> httpd.conf.
+  Example :
+
+   <VirtualHost 1.2.3.4>
+   vhs_Default_Host www.mydomain.com
+   vhs_PHPsafe_mode On
+   vhs_PHPopen_basedir On
+   </VirtualHost>
+
+
+   <VirtualHost 1.2.3.5>
+   vhs_Default_Host www.mydomain.com
+   vhs_PHPsafe_mode Off
+   vhs_PHPopen_basedir Off
+   </VirtualHost>
+  
+  Option from Koen de Boeve
+
+
+Since mod_vhs 1.0.10
+--------------------
+
+o Thanks to apache-dev now DOCUMENT_ROOT now gets the right value form
+  mod_vhs.
+o Server admin email, pathinfo and hostname now gets values from VHS.
+
+
+Since mod_vhs 1.0.8
+-------------------
+
+o Removed unused code.
+o Empty VH_ENVIRONMENT variable is removed and replaced by VH_GECOS
+  with values from gecos returned from libhome or system.
+o Removed DOCUMENT_ROOT "hack" since it doesn't seems to work
+o Added "lamer mode" option (VHS option vhs_Lamer On/Off) to
+  allow people that always add "www." to an address to be 
+  magicaly handled by this module.
+
+Since mod_vhs 1.0.6
+-------------------
+
+o DOCUMENT_ROOT & SERVER_ROOT environment variables 
+  are now completly setup for PHP and some other
+  scriptable environments. 
+
+Since mod_vhs 1.0.2
+-------------------
+
+o Fix bad english in Changelog
+
+Since mod_vhs 1.0
+-----------------
+
+o Create a ChangeLog file
+o Fix compile.sh script
+o DNS names are case insensitives, so HTTP/1.1 Host header should
+  be case insensitive too

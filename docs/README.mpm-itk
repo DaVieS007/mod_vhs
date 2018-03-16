@@ -1,0 +1,1 @@
+This is README for supporting apache2-mpm-itk within mod_vhs.Brief instructions to use mod_vhs with apache2-mpm-itk support.To compile mod_vhs with apache2-mpm-itk support add "-DHAVE_MPM_ITK_SUPPORT" to your "CFLAGS".To enable apache2-mpm-itk support set "vhs_itk_enable On" in your <VirtualHost> section.Pass the uidNumber and gidNumber like the example in the README file.

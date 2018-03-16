@@ -1,0 +1,32 @@
+This is README for supporting mod_suphp within mod_vhs.
+
+Please see http://www.suphp.org/ homepage before asking about what is
+mod_suphp.
+
+To enable suPHP, you have to enable the compilation variable 
+HAVE_MOD_SUPHP_SUPPORT in the Makefile or in the apxs command line.
+
+Note that SuPHP and having mod_php support are *NOT* compatible, you 
+will have to choose what mod you will support for PHP with mod_vhs.
+
+Check that mod_suphp is compiled with SUPHP_USE_USERGROUP to get full 
+support (if there is a good way to get sure of that while loading 
+mod_vhs as module, contact me).
+
+A new configuration variable is added to the apache virtual host configuration:
+vhs_suphp_config_path /users/%s/config
+
+The %s will be replaced by the username which libhome gives back for the hostname.
+SuPHP will look for a php.ini in this path for the given user, it basically needs
+to contain only one line (or whatever options you want to change for the user):
+open_basedir = /users/MYUSER/data
+
+mod_vhs will set the SuPHP-Variables "suPHP_Engine", "suPHP_ConfigPath" and
+"suPHP_UserGroup" for each request in the "vhs_suphp_handler"-method.
+The first problem here is that suphp expects a per-directory configuration,
+which can only be set in the handler, but not in "vhs_translate_name" method.
+
+
+This is for now basic support, if you get some more patches and updates
+don't hesitate to contact me.
+

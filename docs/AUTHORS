@@ -1,0 +1,8 @@
+Xavier Beaudouin <kiwi@oav.net> - Main author
+Koen de Boeve <koen.deboeve@tiscali.be> - Patches
+Raphaël Jeudy <raphael.jeudy@fastorama.com> - Patches
+Guillaume De Lafond <gdelafond@aquaray.com> - Patches and time to add some features
+Rene Kanzler <rk@cosmomill.de> - Added support for apache2-mpm-itk and memcached
+Hlavaji Viktor <davies@npulse.net> - Added support for apache2.4
+
+Manyone I forgot to thanks (please tell if you'd like to be added in this file).

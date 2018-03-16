@@ -1,0 +1,26 @@
+This is README for supporting memcached within mod_vhs.
+
+Please see http://memcached.org homepage before asking about what is
+memcached.
+
+Brief instructions to use mod_vhs with memcached support.
+
+1. Install memcached. Below you will find step-by-step instructions to download and install.
+http://code.google.com/p/memcached/wiki/NewStart
+Don't forget to start the memcached daemon!
+
+2. Download and install apr_memcache
+http://www.outoforder.cc/projects/libs/apr_memcache
+
+3. Download and install mod_memcache
+http://code.google.com/p/modmemcache
+Installation & Configuration:
+http://code.google.com/p/modmemcache/source/browse/trunk/README
+
+4. To compile mod_vhs with memcached support edit the "Makefile" and
+remove the comment (#) in front of "CFLAGS+= -DHAVE_MEMCACHE_SUPPORT".
+
+5. Enable memcached:
+vhs_Memcached: On
+vhs_MemcachedInstance: super-server
+vhs_MemcachedLifeTime: 300
