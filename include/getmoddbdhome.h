@@ -128,6 +128,9 @@ int getmoddbdhome(request_rec *r, vhs_config_rec *vhr, const char *hostname, mod
 		{
 			/* the VHost is in the database */
 			reqc->name = apr_pstrdup(r->pool, apr_dbd_get_entry(dbd->driver, row, 0));
+			/* enforcing lowercase to avoid cache miss and other potential issues if the ServerName column contains uppercase chars */
+			ap_str_tolower(reqc->name);
+
 			ap_log_rerror(APLOG_MARK, APLOG_DEBUG, 0, r, "getmoddbdhome: server_name='%s'", reqc->name);
 			
 			/* email admin server */
