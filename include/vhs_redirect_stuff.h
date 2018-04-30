@@ -18,7 +18,9 @@ static int vhs_redirect_stuff(request_rec * r, vhs_config_rec * vhr)
 		return HTTP_MOVED_TEMPORARILY;
 	}
 	/* Failsafe */
-	ap_log_error(APLOG_MARK, APLOG_ALERT, 0, r->server, "redirect_stuff: no host found (non HTTP/1.1 request, no default set) %s", r->hostname);
+	if (vhr->log_notfound) {
+		ap_log_error(APLOG_MARK, APLOG_ALERT, 0, r->server, "redirect_stuff: no host found (non HTTP/1.1 request, no default set) %s", r->hostname);
+	}
 	return DECLINED;
 }
 

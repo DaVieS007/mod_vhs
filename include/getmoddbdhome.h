@@ -110,7 +110,9 @@ int getmoddbdhome(request_rec *r, vhs_config_rec *vhr, const char *hostname, mod
 		ap_log_rerror(APLOG_MARK, APLOG_DEBUG, 0, r, "getmoddbdhome: apr_dbd_get_row return : %d", rv);
 		
 		if ((rv = apr_dbd_get_row(dbd->driver, r->pool, res, &row, -1))) {
-			ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, "No found results for host '%s' in database", host);
+			if (vhr->log_notfound) {
+				ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, "No found results for host '%s' in database", host);
+			}
 			got_result = 0;
 		}
 		else
