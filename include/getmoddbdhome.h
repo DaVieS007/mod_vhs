@@ -96,7 +96,7 @@ int getmoddbdhome(request_rec *r, vhs_config_rec *vhr, const char *hostname, mod
 	{
 		/* execute the query of a statement and parameter host */
 		if ((rv = apr_dbd_pvselect(dbd->driver, r->pool, dbd->handle, &res, statement, 0, host, NULL))) {
-			ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, "getmoddbdhome: Unable to execute SQL statement (%s): %s", vhr->query_label, apr_dbd_error(dbd->driver, dbd->handle, rv));
+			ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, "getmoddbdhome: Unable to execute SQL statement for %s: %s", hostname, apr_dbd_error(dbd->driver, dbd->handle, rv));
 			lookup_err = 1;
 		}
 		else
