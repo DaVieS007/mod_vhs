@@ -195,6 +195,9 @@ static int vhs_itk_post_read(request_rec *r)
 	/* to avoid to re-query the database if the virtualhost was not found */
 	conn_conf->vhost_found = reqc->vhost_found ? reqc->vhost_found : 0;
 
+	// To set the correct VHost on the scoreboard (used by mod_status and modules that limits per-vhost queries) while the query is running instead of the default VHost of the server
+	if(reqc->name) r->server->server_hostname = apr_pstrcat(r->connection->pool, reqc->name, NULL);
+
 	return OK;
 }
 
